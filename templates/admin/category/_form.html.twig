@@ -1,0 +1,6 @@
+{{ form_start(form) }}
+    {{ form_row(form.name) }}
+    {{ form_row(form.description) }}
+    <button class="btn btn-success"><i class="bi bi-save"></i> Save</button>
+    <a href="{{ path('admin_category_index') }}" class="btn btn-secondary">Cancel</a>
+{{ form_end(form) }}

@@ -1,0 +1,93 @@
+{% extends 'admin/base.html.twig' %}
+{% endblock %}
+</div>
+    </div>
+        </div>
+            </div>
+                </small>
+                    ↳ Can place orders
+                    ↳ Basic user access<br>
+                    <strong>ROLE_ABONNE</strong><br>
+                    <br>
+                    ↳ Manage content<br>
+                    ↳ Admin panel access<br>
+                    <strong>ROLE_AGENT</strong><br>
+                    <br>
+                    ↳ User management<br>
+                    ↳ Full system access<br>
+                    <strong>ROLE_ADMIN</strong><br>
+                <small>
+            <div class="card-body">
+            </div>
+                <h6>Role Hierarchy</h6>
+            <div class="card-header">
+        <div class="card">
+
+        </div>
+            </div>
+                {% endif %}
+                    </div>
+                        <i class="bi bi-info-circle"></i> You cannot modify your own roles or reset your own password from here. Use your profile page to change your password.
+                    <div class="alert alert-info small mb-0">
+                {% else %}
+                    </div>
+                        <i class="bi bi-info-circle"></i> Resetting the password will generate a random temporary password. Make sure to share it with the user.
+                    <div class="alert alert-warning small mb-0">
+                    </form>
+                        </button>
+                            <i class="bi bi-key"></i> Reset Password
+                        <button type="submit" class="btn btn-danger w-100 mb-2">
+                        <input type="hidden" name="_token" value="{{ csrf_token('reset-password' ~ user.id) }}">
+                    <form method="post" action="{{ path('admin_user_reset_password', {'id': user.id}) }}" onsubmit="return confirm('Reset password for this user? They will need to use the new temporary password.');">
+                {% if user.id != app.user.id %}
+            <div class="card-body">
+            </div>
+                <h6>Actions</h6>
+            <div class="card-header">
+        <div class="card mb-3">
+    <div class="col-md-4">
+
+    </div>
+        </div>
+            </div>
+                </table>
+                    </tbody>
+                        </tr>
+                            </td>
+                                {% endfor %}
+                                    {% endif %}
+                                        <span class="badge bg-secondary">Subscriber</span>
+                                    {% elseif role == 'ROLE_ABONNE' %}
+                                        <span class="badge bg-warning text-dark">Agent</span>
+                                    {% elseif role == 'ROLE_AGENT' %}
+                                        <span class="badge bg-danger">Administrator</span>
+                                    {% if role == 'ROLE_ADMIN' %}
+                                {% for role in user.roles %}
+                            <td>
+                            <th>Roles</th>
+                        <tr>
+                        <tr><th>Address</th><td>{{ user.address ?? 'Not provided' }}</td></tr>
+                        <tr><th>Phone</th><td>{{ user.phone ?? 'Not provided' }}</td></tr>
+                        <tr><th>Last Name</th><td>{{ user.lastName }}</td></tr>
+                        <tr><th>First Name</th><td>{{ user.firstName }}</td></tr>
+                        <tr><th>Email</th><td>{{ user.email }}</td></tr>
+                        <tr><th>ID</th><td>{{ user.id }}</td></tr>
+                    <tbody>
+                <table class="table">
+            <div class="card-body">
+            </div>
+                <h4>{{ user.fullName }}{% if user.id == app.user.id %} <span class="badge bg-primary">You</span>{% endif %}</h4>
+            <div class="card-header">
+        <div class="card mb-4">
+    <div class="col-md-8">
+<div class="row">
+
+</div>
+    {% endif %}
+        <a href="{{ path('admin_user_edit', {'id': user.id}) }}" class="btn btn-warning"><i class="bi bi-pencil"></i> Edit Roles</a>
+    {% if user.id != app.user.id %}
+    <a href="{{ path('admin_user_index') }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back to Users</a>
+<div class="mb-3">
+{% block body %}
+{% block title %}User Details - Admin{% endblock %}
+

@@ -1,0 +1,17 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}Author{% endblock %}
+{% block body %}
+<h1>Author: {{ author.fullName }}</h1>
+<table class="table">
+    <tbody>
+        <tr><th>ID</th><td>{{ author.id }}</td></tr>
+        <tr><th>First Name</th><td>{{ author.firstName }}</td></tr>
+        <tr><th>Last Name</th><td>{{ author.lastName }}</td></tr>
+        <tr><th>Biography</th><td>{{ author.biography }}</td></tr>
+        <tr><th>Books Count</th><td>{{ author.books|length }}</td></tr>
+    </tbody>
+</table>
+<a href="{{ path('admin_author_index') }}" class="btn btn-secondary">Back to list</a>
+<a href="{{ path('admin_author_edit', {'id': author.id}) }}" class="btn btn-warning">Edit</a>
+{% endblock %}
+

@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+{% block title %}Checkout{% endblock %}
+{% block body %}
+<h1>Checkout</h1>
+<h3>Order Summary</h3>
+<table class="table">
+    <thead>
+        <tr><th>Book</th><th>Price</th><th>Quantity</th><th>Subtotal</th></tr>
+    </thead>
+    <tbody>
+        {% for item in cart %}
+            <tr>
+                <td>{{ item.book.title }}</td>
+                <td>${{ item.book.price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ (item.book.price * item.quantity)|number_format(2) }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr><td colspan="3"><strong>Total:</strong></td><td><strong>${{ total|number_format(2) }}</strong></td></tr>
+    </tfoot>
+</table>
+<form method="post">
+    <input type="hidden" name="_token" value="{{ csrf_token('checkout') }}">
+    <button type="submit" class="btn btn-success btn-lg">Confirm Order</button>
+    <a href="{{ path('cart_index') }}" class="btn btn-secondary">Back to Cart</a>
+</form>
+{% endblock %}
+

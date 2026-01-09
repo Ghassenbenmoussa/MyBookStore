@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+{% block title %}My Orders{% endblock %}
+{% block body %}
+<h1>My Orders</h1>
+{% if orders %}
+    <table class="table">
+        <thead>
+            <tr><th>Order #</th><th>Date</th><th>Total</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>#{{ order.id }}</td>
+                    <td>{{ order.orderDate|date('Y-m-d') }}</td>
+                    <td>${{ order.totalAmount }}</td>
+                    <td>
+                        {% if order.status == 'pending' %}
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        {% elseif order.status == 'confirmed' %}
+                            <span class="badge bg-info">Confirmed</span>
+                        {% elseif order.status == 'shipped' %}
+                            <span class="badge bg-primary">Shipped</span>
+                        {% elseif order.status == 'delivered' %}
+                            <span class="badge bg-success">Delivered</span>
+                        {% elseif order.status == 'cancelled' %}
+                            <span class="badge bg-danger">Cancelled</span>
+                        {% else %}
+                            <span class="badge bg-secondary">{{ order.status|capitalize }}</span>
+                        {% endif %}
+                    </td>
+                    <td><a href="{{ path('user_order_show', {'id': order.id}) }}" class="btn btn-sm btn-primary">View</a></td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No orders yet. <a href="{{ path('catalog_books') }}">Start shopping</a></p>
+{% endif %}
+{% endblock %}
+

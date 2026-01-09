@@ -1,0 +1,67 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}Orders - Admin{% endblock %}
+{% block body %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="bi bi-cart"></i> Orders</h1>
+    <div>
+        <div class="btn-group" role="group">
+            <a href="{{ path('admin_order_index') }}" class="btn btn-sm {{ currentStatus is null ? 'btn-primary' : 'btn-outline-primary' }}">All</a>
+            {% for statusKey, statusLabel in statuses %}
+                <a href="{{ path('admin_order_index', {'status': statusKey}) }}" class="btn btn-sm {{ currentStatus == statusKey ? 'btn-primary' : 'btn-outline-primary' }}">{{ statusLabel }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body">
+        {% if orders %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Order #</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                            <tr>
+                                <td><strong>#{{ order.id }}</strong></td>
+                                <td>{{ order.user.fullName }}<br><small class="text-muted">{{ order.user.email }}</small></td>
+                                <td>{{ order.orderDate|date('Y-m-d H:i') }}</td>
+                                <td>{{ order.orderItems|length }}</td>
+                                <td><strong>${{ order.totalAmount }}</strong></td>
+                                <td>
+                                    {% if order.status == 'pending' %}
+                                        <span class="badge bg-warning text-dark">Pending</span>
+                                    {% elseif order.status == 'confirmed' %}
+                                        <span class="badge bg-info">Confirmed</span>
+                                    {% elseif order.status == 'shipped' %}
+                                        <span class="badge bg-primary">Shipped</span>
+                                    {% elseif order.status == 'delivered' %}
+                                        <span class="badge bg-success">Delivered</span>
+                                    {% elseif order.status == 'cancelled' %}
+                                        <span class="badge bg-danger">Cancelled</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="{{ path('admin_order_show', {'id': order.id}) }}" class="btn btn-sm btn-info"><i class="bi bi-eye"></i></a>
+                                    <a href="{{ path('admin_order_edit', {'id': order.id}) }}" class="btn btn-sm btn-warning"><i class="bi bi-pencil"></i></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-muted">No orders found{% if currentStatus %} with status "{{ statuses[currentStatus] }}"{% endif %}.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+

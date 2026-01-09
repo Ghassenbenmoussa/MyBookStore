@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+{% block title %}Welcome to MyBookstore{% endblock %}
+{% block body %}
+<div class="text-center mb-5">
+    <h1 class="display-4">Welcome to MyBookstore</h1>
+    <p class="lead">Your online bookstore</p>
+    {% if not app.user %}
+        <div class="mt-4">
+            <a href="{{ path('app_login') }}" class="btn btn-primary me-2">Login</a>
+            <a href="{{ path('app_register') }}" class="btn btn-success">Register</a>
+        </div>
+    {% endif %}
+</div>
+
+{% if categories %}
+    <h3>Browse by Category</h3>
+    <div class="row mb-4">
+        {% for category in categories %}
+            <div class="col-md-3 mb-3">
+                <a href="{{ path('catalog_category_show', {'id': category.id}) }}" class="btn btn-outline-primary w-100">
+                    {{ category.name }} ({{ category.books|length }})
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if featuredBooks %}
+    <h3>Featured Books</h3>
+    <div class="row">
+        {% for book in featuredBooks %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if book.coverImage %}
+                        <img src="{{ asset('uploads/books/' ~ book.coverImage) }}" class="card-img-top" alt="{{ book.title }}" style="height: 300px; object-fit: cover;">
+                    {% else %}
+                        <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 300px;">
+                            <i class="bi bi-book" style="font-size: 5rem;"></i>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ book.title }}</h5>
+                        <p class="card-text"><strong>${{ book.price }}</strong></p>
+                        <a href="{{ path('catalog_book_show', {'id': book.id}) }}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+        <a href="{{ path('catalog_books') }}" class="btn btn-lg btn-primary">Browse All Books</a>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <p class="mb-0">No books available yet. {% if is_granted('ROLE_AGENT') %}<a href="{{ path('admin_book_new') }}">Add some books</a>{% endif %}</p>
+    </div>
+{% endif %}
+{% endblock %}

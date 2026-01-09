@@ -1,0 +1,62 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}Edit User Roles - Admin{% endblock %}
+{% block body %}
+<div class="mb-3">
+    <a href="{{ path('admin_user_show', {'id': user.id}) }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back to User</a>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Edit Roles for {{ user.fullName }}</h5>
+            </div>
+            <div class="card-body">
+                {{ form_start(form) }}
+                    {{ form_row(form.roles) }}
+
+                    <div class="alert alert-info">
+                        <small>
+                            <strong>Important:</strong><br>
+                            • ROLE_ADMIN has full system access including user management<br>
+                            • ROLE_AGENT can access the admin panel and manage content<br>
+                            • ROLE_ABONNE is the default role for all authenticated users<br>
+                            • Role hierarchy: ADMIN → AGENT → ABONNE
+                        </small>
+                    </div>
+
+                    <button class="btn btn-success"><i class="bi bi-save"></i> Save Roles</button>
+                    <a href="{{ path('admin_user_show', {'id': user.id}) }}" class="btn btn-secondary">Cancel</a>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h6>User Information</h6>
+            </div>
+            <div class="card-body">
+                <p><strong>Name:</strong> {{ user.fullName }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Current Roles:</strong></p>
+                <ul>
+                    {% for role in user.roles %}
+                        <li>
+                            {% if role == 'ROLE_ADMIN' %}
+                                <span class="badge bg-danger">{{ role }}</span> - Administrator
+                            {% elseif role == 'ROLE_AGENT' %}
+                                <span class="badge bg-warning text-dark">{{ role }}</span> - Agent
+                            {% elseif role == 'ROLE_ABONNE' %}
+                                <span class="badge bg-secondary">{{ role }}</span> - Subscriber
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

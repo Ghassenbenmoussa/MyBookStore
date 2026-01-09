@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+{% block title %}Editors - MyBookstore{% endblock %}
+{% block body %}
+<h1>Browse by Editor</h1>
+<div class="row">
+    {% for editor in editors %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ editor.name }}</h5>
+                    {% if editor.address %}<p class="card-text"><small>{{ editor.address }}</small></p>{% endif %}
+                    {% if editor.website %}
+                        <p><a href="{{ editor.website }}" target="_blank" class="btn btn-sm btn-outline-primary">Visit Website</a></p>
+                    {% endif %}
+                    <p><span class="badge bg-primary">{{ editor.books|length }} books</span></p>
+                    <a href="{{ path('catalog_editor_show', {'id': editor.id}) }}" class="btn btn-primary">View Books</a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p>No editors found.</p>
+    {% endfor %}
+</div>
+{% endblock %}
+

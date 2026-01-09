@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+{% block title %}Books - MyBookstore{% endblock %}
+{% block body %}
+<h1>Our Books</h1>
+{% if search %}<p>Search results for: <strong>{{ search }}</strong></p>{% endif %}
+<div class="row">
+    {% for book in books %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                {% if book.coverImage %}
+                    <img src="{{ asset('uploads/books/' ~ book.coverImage) }}" class="card-img-top" alt="{{ book.title }}" style="height: 300px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 300px;">
+                        <i class="bi bi-book" style="font-size: 5rem;"></i>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ book.title }}</h5>
+                    <p class="card-text"><strong>${{ book.price }}</strong></p>
+                    <a href="{{ path('catalog_book_show', {'id': book.id}) }}" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p>No books found.</p>
+    {% endfor %}
+</div>
+{% endblock %}
+

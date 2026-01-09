@@ -1,0 +1,8 @@
+{{ form_start(form) }}
+{{ form_row(form.firstName) }}
+{{ form_row(form.lastName) }}
+{{ form_row(form.biography) }}
+<button class="btn btn-success"><i class="bi bi-save"></i> Save</button>
+<a href="{{ path('admin_author_index') }}" class="btn btn-secondary">Cancel</a>
+{{ form_end(form) }}
+

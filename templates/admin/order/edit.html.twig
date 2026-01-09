@@ -1,0 +1,65 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}Update Order Status - Admin{% endblock %}
+{% block body %}
+<div class="mb-3">
+    <a href="{{ path('admin_order_show', {'id': order.id}) }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Back to Order</a>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Update Order #{{ order.id }} Status</h5>
+            </div>
+            <div class="card-body">
+                {{ form_start(form, {'method': 'POST', 'attr': {'novalidate': 'novalidate'}}) }}
+                    {{ form_row(form.status) }}
+
+                    <div class="alert alert-info">
+                        <small>
+                            <strong>Status Meanings:</strong><br>
+                            <strong>Pending:</strong> Order received, awaiting confirmation<br>
+                            <strong>Confirmed:</strong> Order confirmed, preparing for shipment<br>
+                            <strong>Shipped:</strong> Order has been shipped<br>
+                            <strong>Delivered:</strong> Order delivered to customer<br>
+                            <strong>Cancelled:</strong> Order was cancelled
+                        </small>
+                    </div>
+
+                    <button type="submit" class="btn btn-success"><i class="bi bi-save"></i> Update Status</button>
+                    <a href="{{ path('admin_order_show', {'id': order.id}) }}" class="btn btn-secondary">Cancel</a>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h6>Order Summary</h6>
+            </div>
+            <div class="card-body">
+                <p><strong>Customer:</strong> {{ order.user.fullName }}</p>
+                <p><strong>Email:</strong> {{ order.user.email }}</p>
+                <p><strong>Order Date:</strong> {{ order.orderDate|date('Y-m-d H:i') }}</p>
+                <p><strong>Total Items:</strong> {{ order.orderItems|length }}</p>
+                <p><strong>Total Amount:</strong> <span class="text-success">${{ order.totalAmount }}</span></p>
+                <p><strong>Current Status:</strong>
+                    {% if order.status == 'pending' %}
+                        <span class="badge bg-warning text-dark">Pending</span>
+                    {% elseif order.status == 'confirmed' %}
+                        <span class="badge bg-info">Confirmed</span>
+                    {% elseif order.status == 'shipped' %}
+                        <span class="badge bg-primary">Shipped</span>
+                    {% elseif order.status == 'delivered' %}
+                        <span class="badge bg-success">Delivered</span>
+                    {% elseif order.status == 'cancelled' %}
+                        <span class="badge bg-danger">Cancelled</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

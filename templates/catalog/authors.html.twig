@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+{% block title %}Authors - MyBookstore{% endblock %}
+{% block body %}
+<h1>Browse by Author</h1>
+<div class="row">
+    {% for author in authors %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ author.fullName }}</h5>
+                    {% if author.biography %}
+                        <p class="card-text">{{ author.biography|length > 100 ? author.biography|slice(0, 100) ~ '...' : author.biography }}</p>
+                    {% endif %}
+                    <p><span class="badge bg-primary">{{ author.books|length }} books</span></p>
+                    <a href="{{ path('catalog_author_show', {'id': author.id}) }}" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <p>No authors found.</p>
+    {% endfor %}
+</div>
+{% endblock %}
+

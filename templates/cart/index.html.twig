@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+{% block title %}Shopping Cart{% endblock %}
+{% block body %}
+<h1>Shopping Cart</h1>
+{% if cart %}
+    <table class="table">
+        <thead>
+            <tr><th>Book</th><th>Price</th><th>Quantity</th><th>Subtotal</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            {% for id, item in cart %}
+                <tr>
+                    <td>{{ item.book.title }}</td>
+                    <td>${{ item.book.price }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ (item.book.price * item.quantity)|number_format(2) }}</td>
+                    <td>
+                        <form method="post" action="{{ path('cart_remove', {'id': id}) }}" style="display:inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('cart_remove' ~ id) }}">
+                            <button class="btn btn-sm btn-danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr><td colspan="3"><strong>Total:</strong></td><td colspan="2"><strong>${{ total|number_format(2) }}</strong></td></tr>
+        </tfoot>
+    </table>
+    <a href="{{ path('cart_checkout') }}" class="btn btn-success btn-lg">Proceed to Checkout</a>
+    <form method="post" action="{{ path('cart_clear') }}" style="display:inline" onsubmit="return confirm('Clear cart?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('cart_clear') }}">
+        <button class="btn btn-warning">Clear Cart</button>
+    </form>
+{% else %}
+    <p>Your cart is empty. <a href="{{ path('catalog_books') }}">Browse books</a></p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,3 @@
+cat > temindex'{% extends 'admin/base.html.twig' %}
+{% block title %<a{% block title %}Edit Category{% en',{% block body %}
+    <h1>Edit Category</h1>rn    <h1>Edit Ca%     {{ include('

@@ -1,0 +1,162 @@
+{% extends 'admin/base.html.twig' %}
+{% block title %}Dashboard - Admin - MyBookstore{% endblock %}
+{% block body %}
+<div class="container-fluid">
+    <h1 class="mb-4">Dashboard</h1>
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-book"></i> Total Books</h5>
+                    <h2>{{ totalBooks }}</h2>
+                    <a href="{{ path('admin_book_index') }}" class="text-white">View all <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-success">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-tags"></i> Categories</h5>
+                    <h2>{{ totalCategories }}</h2>
+                    <a href="{{ path('admin_category_index') }}" class="text-white">View all <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-warning">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-cart"></i> Total Orders</h5>
+                    <h2>{{ totalOrders }}</h2>
+                    <a href="{{ path('admin_order_index') }}" class="text-white">View all <i class="bi bi-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card text-white bg-info">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-people"></i> Total Users</h5>
+                    <h2>{{ totalUsers }}</h2>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('admin_user_index') }}" class="text-white">View all <i class="bi bi-arrow-right"></i></a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5><i class="bi bi-clock-history"></i> Recent Orders</h5>
+                </div>
+                <div class="card-body">
+                    {% if recentOrders %}
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>User</th>
+                                        <th>Date</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in recentOrders %}
+                                        <tr>
+                                            <td>#{{ order.id }}</td>
+                                            <td>{{ order.user.fullName }}</td>
+                                            <td>{{ order.orderDate|date('Y-m-d H:i') }}</td>
+                                            <td>${{ order.totalAmount }}</td>
+                                            <td>
+                                                {% if order.status == 'pending' %}
+                                                    <span class="badge bg-warning text-dark">Pending</span>
+                                                {% elseif order.status == 'confirmed' %}
+                                                    <span class="badge bg-info">Confirmed</span>
+                                                {% elseif order.status == 'shipped' %}
+                                                    <span class="badge bg-primary">Shipped</span>
+                                                {% elseif order.status == 'delivered' %}
+                                                    <span class="badge bg-success">Delivered</span>
+                                                {% elseif order.status == 'cancelled' %}
+                                                    <span class="badge bg-danger">Cancelled</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">{{ order.status|capitalize }}</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">No orders yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5><i class="bi bi-exclamation-triangle"></i> Low Stock Books</h5>
+                </div>
+                <div class="card-body">
+                    {% if lowStockBooks %}
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Book</th>
+                                        <th>Stock</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for book in lowStockBooks %}
+                                        <tr>
+                                            <td>{{ book.title }}</td>
+                                            <td>
+                                                <span class="badge bg-warning text-dark">{{ book.stock }}</span>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="text-muted">All books have sufficient stock.</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% if outOfStockBooks %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5><i class="bi bi-x-circle"></i> Out of Stock Books</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Book</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for book in outOfStockBooks %}
+                                    <tr>
+                                        <td>{{ book.title }}</td>
+                                        <td>
+                                            <span class="badge bg-danger">Out of stock</span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
